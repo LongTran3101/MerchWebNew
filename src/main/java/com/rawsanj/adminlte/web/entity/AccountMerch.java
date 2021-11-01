@@ -19,6 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -63,8 +64,29 @@ public class AccountMerch implements Serializable {
     @Basic(optional = false)
     @Column(name = "email")
     private String email;
+    @Basic(optional = false)
+    @Column(name = "path")
+    private String path;
 
-    public AccountMerch() {
+    @Transient
+    private String dayString;
+    public String getDayString() {
+		return dayString;
+	}
+
+	public void setDayString(String dayString) {
+		this.dayString = dayString;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public AccountMerch() {
     }
 
     public AccountMerch(Integer id) {

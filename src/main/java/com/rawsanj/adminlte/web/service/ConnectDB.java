@@ -170,20 +170,17 @@ public class ConnectDB {
         		
         		
         		List<AccountMerch> lst=new ArrayList<>();
-                String sql = "select * from account_merch ";
+                String sql = "select name,ip,email from account_merch ";
                 statement =con.prepareStatement(sql);
                 rs = statement.executeQuery();
                 
                 System.out.println("Data from online Database :");
                 while(rs.next()){
                 	AccountMerch merch = new AccountMerch();
-                	merch.setId(rs.getInt("id"));
+                	
                 	merch.setName(rs.getString("name"));
                 	merch.setIp(rs.getString("ip"));
-                	System.out.println(rs.getDate("day"));
-                	merch.setDay(rs.getDate("day"));
-                	merch.setSale(rs.getInt("sale"));
-                	merch.setMoney(rs.getDouble("money"));
+                	
                 	merch.setEmail(rs.getString("email"));
                 	lst.add(merch);
                 }

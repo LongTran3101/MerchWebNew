@@ -30,8 +30,6 @@
 							<tr>
 								<th>STT</th>
 								<th>name</th>
-								<th>Sale</th>
-								<th>Money</th>
 								<th>ip</th>
 								<th>email</th>
 								<th>checkSale</th>
@@ -44,8 +42,7 @@
 									<td th:text="${k.index + 1}" class="text-right"
 										style="width: 5%;">1</td>
 									<td th:text="${item.name}" class="text-left"></td>
-									<td th:text="${item.sale}" class="text-left"></td>
-									<td th:text="${item.money}" class="text-left"></td>
+									
 									<td th:text="${item.ip}" class="text-left"></td>
 									<td th:text="${item.email}" class="text-left"></td>
 									<td>
@@ -91,11 +88,10 @@
 		<script src="/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 		<script src="/plugins/jQuery/toastr.min.js"></script>
 		<script type="text/javascript" th:inline="javascript">
-		var base_url = [[@{/}]];
 		 $('.checkSaleButton').click(function() {
 			 var id = $(this).attr("data-id");
 			 $.ajax({
-	              url: base_url + 'checkSaleById',
+	              url:  'http://localhost:8080/checkSaleById',
 	              data:{id:id},
 	              async: false,
 	              success: function(rs) {
