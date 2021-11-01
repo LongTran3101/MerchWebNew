@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccountMerch.findBySale", query = "SELECT a FROM AccountMerch a WHERE a.sale = :sale"),
     @NamedQuery(name = "AccountMerch.findByMoney", query = "SELECT a FROM AccountMerch a WHERE a.money = :money"),
     @NamedQuery(name = "AccountMerch.findByEmail", query = "SELECT a FROM AccountMerch a WHERE a.email = :email")})
-public class AccountMerch implements Serializable {
+public class SaleMerch implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,14 +86,14 @@ public class AccountMerch implements Serializable {
 		this.path = path;
 	}
 
-	public AccountMerch() {
+	public SaleMerch() {
     }
 
-    public AccountMerch(Integer id) {
+    public SaleMerch(Integer id) {
         this.id = id;
     }
 
-    public AccountMerch(Integer id, String name, String ip, Date day, int sale, double money, String email) {
+    public SaleMerch(Integer id, String name, String ip, Date day, int sale, double money, String email) {
         this.id = id;
         this.name = name;
         this.ip = ip;
@@ -169,10 +169,10 @@ public class AccountMerch implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AccountMerch)) {
+        if (!(object instanceof SaleMerch)) {
             return false;
         }
-        AccountMerch other = (AccountMerch) object;
+        SaleMerch other = (SaleMerch) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

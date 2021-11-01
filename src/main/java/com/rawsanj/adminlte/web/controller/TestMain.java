@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.rawsanj.adminlte.web.entity.AccountMerch;
+import com.rawsanj.adminlte.web.entity.SaleMerch;
 import com.rawsanj.adminlte.web.service.ConnectDB;
 
 public class TestMain {

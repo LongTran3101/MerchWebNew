@@ -2,6 +2,7 @@ package com.rawsanj.adminlte.web.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -9,11 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.rawsanj.adminlte.web.entity.SaleMerch;
 import com.rawsanj.adminlte.web.entity.AccountMerch;
 import com.rawsanj.adminlte.web.entity.Customers;
 import com.rawsanj.adminlte.web.entity.User;
@@ -30,7 +35,8 @@ public class DashboardController {
 
     @RequestMapping("/")
     public String index() {
-        return "dashboard/index";
+    	System.out.println("abc");
+        return "/dashboard/index";
     }
     @RequestMapping("/user")
     public String user() {
@@ -43,7 +49,7 @@ public class DashboardController {
     	if(daySeach!=null && daySeach!="")
     	{
     		ConnectDB db=new ConnectDB();
-    		List<AccountMerch> lst=db.getSaleByDay(daySeach);
+    		List<SaleMerch> lst=db.getSaleByDay(daySeach);
     		model.addAttribute("lst", lst);
             return "dashboard/checkSale";
     	}
@@ -57,7 +63,7 @@ public class DashboardController {
     public String allAcc( HttpSession session, Model model, HttpServletRequest request) {
     	
     		ConnectDB db=new ConnectDB();
-    		List<AccountMerch> lst=db.getAllAcc();
+    		List<SaleMerch> lst=db.getAllAcc();
     		model.addAttribute("lst", lst);
             return "dashboard/allAcc";
     	
@@ -68,39 +74,88 @@ public class DashboardController {
     public String checkSaleById( HttpSession session, Model model, HttpServletRequest request) {
     	try {
     		String id=request.getParameter("id");
+    		
     		ConnectDB db=new ConnectDB();
-    		AccountMerch merch=db.getByID(Integer.parseInt(id));
-    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    		String req=gson.toJson( merch);
+    		SaleMerch merch=db.getByID(Integer.parseInt(id));
+    		ObjectMapper objectMapper = new ObjectMapper();
+    		String req = objectMapper.writeValueAsString(merch);
     		CallAPi callApi=new CallAPi();
-    		String rep =callApi.callAPIPost("http://34.71.202.141:8080/checksalemerchtest", req);
+    		String rep =callApi.callAPIPost("http://"+merch.getIp()+":8080/checksalemerchtest", req);
     		//model.addAttribute("lst", lst);
-            return rep;
+    		if(rep!=null && rep.equalsIgnoreCase("00"))
+			{
+				return "00";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return"ok";
+    	return"01";
+    	    
+    	
+    }
+    @RequestMapping("/deleteAccountMerch")
+    @ResponseBody
+    public String deleteAccountMerch( HttpSession session, Model model, HttpServletRequest request) {
+    	try {
+    		String id=request.getParameter("id");
+    		ConnectDB db=new ConnectDB();
+			
+			 boolean check=db.deleteAccountMerch(Integer.parseInt(id));
+			if(check)
+			{
+				return "00";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return"01";
     	    
     	
     }
     
-    @RequestMapping("/saveCheckSale")
+    
+    
+    @RequestMapping("/saveAccountMerch")
     @ResponseBody
-    public String saveCheckSale( HttpSession session, Model model, HttpServletRequest request) {
+    public String saveAccountMerch(@ModelAttribute AccountMerch acc, HttpSession session, Model model, HttpServletRequest request) {
     	try {
-    		String id=request.getParameter("id");
-    		ConnectDB db=new ConnectDB();
-    		AccountMerch merch=db.getByID(Integer.parseInt(id));
-    		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    		String req=gson.toJson( merch);
-    		CallAPi callApi=new CallAPi();
-    		String rep =callApi.callAPIPost("http://34.71.202.141:8080/checksalemerchtest", req);
+			ConnectDB db=new ConnectDB();
+			
+			 boolean check=db.insertAccountMerch(acc);
+			if(check)
+			{
+				return "00";
+			}
     		//model.addAttribute("lst", lst);
-            return rep;
+            
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	return"ok";
+    	return"01";
+    	    
+    	
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/saveCheckSale", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	private String test( @RequestBody String req,HttpServletRequest request, HttpServletResponse resp) {
+    
+    	try {
+    		ObjectMapper objectMapper = new ObjectMapper();
+			SaleMerch mech=objectMapper.readValue(req, SaleMerch.class);
+			ConnectDB db=new ConnectDB();
+			
+			 boolean check=db.insert(mech);
+			if(check)
+			{
+				return "00";
+			}
+    		//model.addAttribute("lst", lst);
+            
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return"01";
     	    
     	
     }
