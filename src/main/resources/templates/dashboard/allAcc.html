@@ -151,7 +151,7 @@
 		<script type="text/javascript" th:inline="javascript">
 		var base_url = [[@{/}]];
 		 $('.deleteButton').click(function() {
-			 var id = $(this).attr("data-id");
+			 var id = $(this).attr("data-id"); 
 			 $.ajax({
 	              url: base_url + 'deleteAccountMerch',
 	              data:{id:id},
