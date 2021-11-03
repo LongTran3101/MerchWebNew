@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -63,7 +65,7 @@ public class DashboardController {
     public String allAcc( HttpSession session, Model model, HttpServletRequest request) {
     	
     		ConnectDB db=new ConnectDB();
-    		List<SaleMerch> lst=db.getAllAcc();
+    		List<AccountMerch> lst=db.getAllAcc();
     		model.addAttribute("lst", lst);
             return "dashboard/allAcc";
     	
@@ -76,7 +78,10 @@ public class DashboardController {
     		String id=request.getParameter("id");
     		
     		ConnectDB db=new ConnectDB();
-    		SaleMerch merch=db.getByID(Integer.parseInt(id));
+
+    		AccountMerch merch=db.getByID(Integer.parseInt(id));
+    
+
     		ObjectMapper objectMapper = new ObjectMapper();
     		String req = objectMapper.writeValueAsString(merch);
     		CallAPi callApi=new CallAPi();
@@ -93,6 +98,7 @@ public class DashboardController {
     	    
     	
     }
+
     @RequestMapping("/deleteAccountMerch")
     @ResponseBody
     public String deleteAccountMerch( HttpSession session, Model model, HttpServletRequest request) {
@@ -136,22 +142,20 @@ public class DashboardController {
     	
     }
     
+   
     @ResponseBody
     @RequestMapping(value = "/saveCheckSale", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	private String test( @RequestBody String req,HttpServletRequest request, HttpServletResponse resp) {
     
     	try {
     		ObjectMapper objectMapper = new ObjectMapper();
-			SaleMerch mech=objectMapper.readValue(req, SaleMerch.class);
+    		SaleMerch mech=objectMapper.readValue(req, SaleMerch.class);
 			ConnectDB db=new ConnectDB();
 			
-			 boolean check=db.insert(mech);
-			if(check)
-			{
-				return "00";
-			}
+			db.insert(mech);
+			
     		//model.addAttribute("lst", lst);
-            
+            return "00";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

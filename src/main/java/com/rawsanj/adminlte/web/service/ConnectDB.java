@@ -198,63 +198,68 @@ public class ConnectDB {
 		}
 		return false;
 	}
-	public SaleMerch getByID(int ID) {
-		try {
-			try {
-
-				List<SaleMerch> lst = new ArrayList<>();
-				String sql = "select * from account_merch where id = ? ";
-				statement = con.prepareStatement(sql);
-				statement.setInt(1, ID);
-				rs = statement.executeQuery();
-
-				System.out.println("Data from online Database :");
-				while (rs.next()) {
-					SaleMerch merch = new SaleMerch();
-					merch.setId(rs.getInt("id"));
-					merch.setName(rs.getString("name"));
-					merch.setIp(rs.getString("ip"));
-					merch.setEmail(rs.getString("email"));
-					merch.setPath(rs.getString("path"));
-					lst.add(merch);
-				}
-				return lst.get(0);
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				statement.close();
-				con.close();
-			}
-			return null;
-
-		} catch (Exception ex) {
-			System.out.println("Error is found :" + ex);
-			return null;
-		}
-	}
-
-	public List<SaleMerch> getAllAcc() {
-		try {
-			try {
-
-				List<SaleMerch> lst = new ArrayList<>();
-				String sql = "select id,name,ip,email,path from account_merch ";
-				statement = con.prepareStatement(sql);
-				rs = statement.executeQuery();
-
-				System.out.println("Data from online Database :");
-				while (rs.next()) {
-					SaleMerch merch = new SaleMerch();
-
-					merch.setName(rs.getString("name"));
-					merch.setPath(rs.getString("path"));
-					merch.setId(rs.getInt("id"));
-					merch.setIp(rs.getString("ip"));
-
-					merch.setEmail(rs.getString("email"));
-					lst.add(merch);
-				}
-				return lst;
+	
+    public AccountMerch getByID(int ID)
+    {
+    	 try{
+         	try {
+         		
+         		
+         		List<AccountMerch> lst=new ArrayList<>();
+                 String sql = "select * from account_merch where id = ? ";
+                 statement =con.prepareStatement(sql);
+                 statement.setInt(1, ID);
+                 rs = statement.executeQuery();
+                 
+                 System.out.println("Data from online Database :");
+                 while(rs.next()){
+                 	AccountMerch merch = new AccountMerch();
+                 	merch.setId(rs.getInt("id"));
+                 	merch.setName(rs.getString("name"));
+                 	merch.setIp(rs.getString("ip"));
+                 	System.out.println(rs.getDate("day"));
+                 	merch.setDay(rs.getDate("day"));
+                 	merch.setSale(rs.getInt("sale"));
+                 	merch.setMoney(rs.getDouble("money"));
+                 	merch.setEmail(rs.getString("email"));
+                 	lst.add(merch);
+                 }
+                 return lst.get(0);
+ 			} catch (Exception e) {
+ 				e.printStackTrace();
+ 			}finally {
+ 				statement.close();
+ 				con.close();
+ 			}
+         	return null;
+           
+             
+         }catch(Exception ex){
+             System.out.println("Error is found :"+ex);
+             return null;
+         }
+    }
+    public List<AccountMerch> getAllAcc(){
+        try{
+        	try {
+        		
+        		
+        		List<AccountMerch> lst=new ArrayList<>();
+                String sql = "select name,ip,email from account_merch ";
+                statement =con.prepareStatement(sql);
+                rs = statement.executeQuery();
+                
+                System.out.println("Data from online Database :");
+                while(rs.next()){
+                	AccountMerch merch = new AccountMerch();
+                	
+                	merch.setName(rs.getString("name"));
+                	merch.setIp(rs.getString("ip"));
+                	
+                	merch.setEmail(rs.getString("email"));
+                	lst.add(merch);
+                }
+                return lst;
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
